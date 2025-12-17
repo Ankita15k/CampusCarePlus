@@ -48,7 +48,7 @@ const AdminLogin = () => {
         <div className="admin-login-left">
 
           <button
-            className="home-btn"
+            className="home-btn mb-6"
             onClick={() => navigate("/")}
           >
             <ArrowLeft size={20} />
@@ -74,10 +74,7 @@ const AdminLogin = () => {
             <li>Trusted & secure access</li>
           </ul>
 
-          <button className="home-btn" onClick={() => navigate("/")}>
-            <ArrowLeft size={18} />
-            Back to Home
-          </button>
+        
         </div>
 
         {/* RIGHT PANEL */}

@@ -1,21 +1,12 @@
 import { useState } from "react";
-import { ShieldCheck, ImagePlus } from "lucide-react";
+import { ShieldCheck, ImagePlus, Send } from "lucide-react";
 import addData from "../../utils/addData";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Captcha from "../../utils/Captcha";
 import { generateToken } from "../../utils/generateToken";
 
-const categories = [
-  "Hostel",
-  "Hygiene",
-  "Electricity",
-  "WiFi",
-  "Faculty",
-  "Ragging",
-  "Harassment",
-  "Classrooms",
-];
+
 
 const SubmitIssue = () => {
   const [anonymous, setAnonymous] = useState(true);
@@ -228,12 +219,13 @@ const SubmitIssue = () => {
 
           {/* Submit */}
 
-          { !anonymous ? (<button
-            type="submit"
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-xl font-semibold text-lg transition"
-          >
-            Submit Issue Securely
-          </button>
+        <button
+  type="submit"
+  className="cursor-pointer w-full bg-emerald-900 hover:bg-emerald-800 text-white py-3 rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition"
+>
+  <Send />
+  {anonymous ? "Submit Issue" : "Submit Issue Anonymously"}
+</button>
         </form>
       </div>
 
