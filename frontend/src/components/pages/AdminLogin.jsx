@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  ShieldCheck,
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  ArrowLeft,
-} from "lucide-react";
+import { ShieldCheck, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import "./styles/AdminLogin.css";
 import forgotPassword from "../../utils/forgetPassword";
 import toast from "react-hot-toast";
@@ -23,16 +16,17 @@ const AdminLogin = () => {
 
   // Login
   const handleLogin = async (e) => {
+    const toastId = toast.loading("signing in..")
     e.preventDefault();
     setLoading(true);
 
     const login_data = await login(email, password);
 
     if (login_data) {
-      toast.success("Logged in successfully");
       navigate("/admin/dashboard");
+      toast.success("Logged in successfully", {id:toastId});
     }
-
+    
     setLoading(false);
   };
 
@@ -50,7 +44,6 @@ const AdminLogin = () => {
   return (
     <div className="admin-login-wrapper">
       <div className="admin-login-container">
-
         {/* LEFT PANEL */}
         <div className="admin-login-left">
 
@@ -81,6 +74,10 @@ const AdminLogin = () => {
             <li>Trusted & secure access</li>
           </ul>
 
+          <button className="home-btn" onClick={() => navigate("/")}>
+            <ArrowLeft size={18} />
+            Back to Home
+          </button>
         </div>
 
         {/* RIGHT PANEL */}
@@ -89,7 +86,6 @@ const AdminLogin = () => {
           <p className="subtitle">Authorized personnel only</p>
 
           <form onSubmit={handleLogin} className="login-form">
-
             {/* Email */}
             <div className="input-group">
               <Mail size={18} className="input-icon" />
@@ -129,16 +125,11 @@ const AdminLogin = () => {
             </div>
 
             {/* Submit */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="login-btn"
-            >
-              {loading ? "Authenticating..." : "Login"}
+            <button type="submit" disabled={loading} className="login-btn">
+              {loading ? "Authenticating..." : "Sign In"}
             </button>
           </form>
         </div>
-
       </div>
     </div>
   );
