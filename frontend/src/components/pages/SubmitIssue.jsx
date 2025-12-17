@@ -3,6 +3,7 @@ import addData from "../../utils/addData";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Captcha from "../../utils/Captcha";
+import { Send, Upload } from "lucide-react";
 
 const SubmitIssue = () => {
   const [anonymous, setAnonymous] = useState(true);
@@ -18,6 +19,20 @@ const SubmitIssue = () => {
     description: "",
     image: null,
   });
+
+  const categories = [
+    'Hostel Issues',
+    'Hygiene & Sanitation',
+    'WiFi & Internet',
+    'Electricity & Power',
+    'Harassment',
+    'Ragging',
+    'Faculty Concerns',
+    'Infrastructure',
+    'Food & Mess',
+    'Library',
+    'Other'
+  ];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -50,8 +65,6 @@ const SubmitIssue = () => {
   
   }
 
-    // console.log({ anonymous, ...form });
-
   };
 
   return (
@@ -59,11 +72,11 @@ const SubmitIssue = () => {
       <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg overflow-hidden">
         
         {/* Header */}
-        <div className="bg-blue-900 text-white px-8 py-6">
+        <div className="bg-emerald-700 text-white px-8 py-6">
           <h1 className="text-2xl font-bold">
-            CampusCare<span className="text-emerald-400">+</span>
+            CampusCare
           </h1>
-          <p className="text-blue-100 mt-1">
+          <p className="text-emerald-100 mt-1">
             Report a campus issue safely and responsibly
           </p>
         </div>
@@ -72,9 +85,9 @@ const SubmitIssue = () => {
         <form onSubmit={handleSubmit} className="p-8 space-y-6">
 
           {/* Anonymous Toggle */}
-          <div className="flex items-center justify-between bg-blue-50 border border-blue-100 rounded-lg p-4">
+          <div className="flex items-center justify-between bg-blue-50 border border-emerald-100 rounded-lg p-4">
             <div>
-              <h3 className="font-semibold text-blue-900">
+              <h3 className="font-semibold text-emerald-900">
                 Submit Anonymously
               </h3>
               <p className="text-sm text-gray-600">
@@ -85,12 +98,12 @@ const SubmitIssue = () => {
             <button
               type="button"
               onClick={() => setAnonymous(!anonymous)}
-              className={`w-14 h-7 flex items-center rounded-full p-1 transition ${
+              className={`w-14 h-7 flex items-center rounded-full p-1 cursor-pointer transition ${
                 anonymous ? "bg-emerald-500" : "bg-gray-300"
               }`}
             >
               <div
-                className={`bg-white w-5 h-5 rounded-full shadow transform transition ${
+                className={`bg-white w-5 h-5 rounded-full cursor-pointer shadow transform transition ${
                   anonymous ? "translate-x-7" : ""
                 }`}
               />
@@ -102,26 +115,26 @@ const SubmitIssue = () => {
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Your Name
+                  Your Name *
                 </label>
                 <input
                   name="name"
                   value={form.name}
                   onChange={handleChange}
-                  className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-900"
+                  className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-emerald-900"
                   required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Contact (Email / Phone)
+                  Contact (Email / Phone) *
                 </label>
                 <input
                   name="contact"
                   value={form.contact}
                   onChange={handleChange}
-                  className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-900"
+                  className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-emerald-900"
                   required
                 />
               </div>
@@ -132,34 +145,32 @@ const SubmitIssue = () => {
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Issue Category
+                Issue Category *
               </label>
               <select
                 name="category"
                 value={form.category}
                 onChange={handleChange}
-                className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-900"
+                className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-emerald-900"
                 required
               >
                 <option value="">Select category</option>
-                <option>Hostel</option>
-                <option>WiFi</option>
-                <option>Hygiene</option>
-                <option>Electricity</option>
-                <option>Faculty</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
               </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Location
+                Location *
               </label>
               <input
                 name="location"
                 value={form.location}
                 onChange={handleChange}
                 placeholder="Block / Room / Area"
-                className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-900"
+                className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-emerald-900"
                 required
               />
             </div>
@@ -168,25 +179,26 @@ const SubmitIssue = () => {
           {/* Description */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Issue Description
+              Issue Description *
             </label>
             <textarea
               name="description"
               value={form.description}
               onChange={handleChange}
               rows="4"
-              className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-900"
+              className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-emerald-900"
+              placeholder="Describe your issue here...."
               required
             />
           </div>
 
           {/* Image Upload */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="imageUpload" className="block text-sm font-medium text-gray-700 mb-2">
               Upload Image (Optional)
             </label>
 
-            <div className="border-2 border-dashed rounded-lg p-4 text-center">
+            <div className="border-2 border-dashed rounded-lg p-4 text-center hover:border-emerald-600 transition-colors">
               <input
                 type="file"
                 accept="image/*"
@@ -196,8 +208,9 @@ const SubmitIssue = () => {
               />
               <label
                 htmlFor="imageUpload"
-                className="cursor-pointer text-blue-700 font-medium"
+                className="cursor-pointer text-emerald-700 font-medium flex items-center justify-center gap-2"
               >
+                <Upload/>
                 Click to upload image
               </label>
 
@@ -214,12 +227,20 @@ const SubmitIssue = () => {
           <Captcha onVerify={SetcaptchaToken} />
 
           {/* Submit */}
-          <button
+
+          { !anonymous ? (<button
             type="submit"
-            className="w-full bg-blue-900 hover:bg-blue-800 text-white py-3 rounded-xl font-semibold text-lg"
+            className="cursor-pointer w-full bg-emerald-900 hover:bg-emerald-800 text-white py-3 rounded-xl font-semibold text-lg flex items-center justify-center gap-2"
           >
+            <Send />
             Submit Issue
-          </button>
+          </button>) : (<button
+            type="submit"
+            className="cursor-pointer w-full bg-emerald-900 hover:bg-emerald-800 text-white py-3 rounded-xl font-semibold text-lg flex items-center justify-center gap-2"
+          >
+            <Send />
+            Submit Issue Anonymously
+          </button>)}
         </form>
       </div>
     </div>

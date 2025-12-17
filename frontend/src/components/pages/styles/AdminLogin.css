@@ -26,7 +26,7 @@
 
 /* LEFT */
 .admin-login-left {
-  background: linear-gradient(180deg, #064e3b, #065f46);
+  background: linear-gradient(180deg, #05543e, #147259);
   color: white;
   padding: 3rem;
   display: flex;
@@ -55,8 +55,9 @@
 
 .features {
   margin-top: 2rem;
-  list-style: none;
+  list-style-type:circle;
   padding: 0;
+  margin-left: 1rem;
 }
 
 .features li {
@@ -72,7 +73,7 @@
   background: rgba(255, 255, 255, 0.15);
   border: none;
   color: white;
-  padding: 12px 16px;
+  padding: 0.9rem 1rem;
   border-radius: 10px;
   cursor: pointer;
 }

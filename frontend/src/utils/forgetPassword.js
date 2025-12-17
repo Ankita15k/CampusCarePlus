@@ -16,7 +16,7 @@ const forgotPassword = async (email) => {
     return "Password reset link sent to your email";
   } catch (error) {
     console.error("Password reset failed:", error);
-    throw error; // 👈 important
+    throw error; // Rethrow the error for further handling
   }
 };
 

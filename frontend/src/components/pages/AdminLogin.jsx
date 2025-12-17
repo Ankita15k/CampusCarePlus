@@ -53,11 +53,22 @@ const AdminLogin = () => {
 
         {/* LEFT PANEL */}
         <div className="admin-login-left">
-          <ShieldCheck size={46} className="shield-icon" />
 
-          <h1 className="logo">
-            Campus<span>Care</span>
-          </h1>
+          <button
+            className="home-btn"
+            onClick={() => navigate("/")}
+          >
+            <ArrowLeft size={20} />
+            Back to Home
+          </button>
+
+          <div className="flex gap-2 mt-3">
+            <ShieldCheck size={36} className="shield-icon mt-1" />
+
+            <h1 className="logo">
+              Campus<span>Care</span>
+            </h1>
+          </div>
 
           <p className="tagline">
             Secure administration for a safer campus ecosystem
@@ -70,13 +81,6 @@ const AdminLogin = () => {
             <li>Trusted & secure access</li>
           </ul>
 
-          <button
-            className="home-btn"
-            onClick={() => navigate("/")}
-          >
-            <ArrowLeft size={18} />
-            Back to Home
-          </button>
         </div>
 
         {/* RIGHT PANEL */}
@@ -130,7 +134,7 @@ const AdminLogin = () => {
               disabled={loading}
               className="login-btn"
             >
-              {loading ? "Authenticating..." : "Sign In"}
+              {loading ? "Authenticating..." : "Login"}
             </button>
           </form>
         </div>
