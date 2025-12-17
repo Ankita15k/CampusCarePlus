@@ -4,6 +4,7 @@ import {
   Database,
   Bell,
   BadgeCheck,
+  Ban,
 } from "lucide-react";
 
 const privacyPoints = [
@@ -32,6 +33,11 @@ const privacyPoints = [
     desc: "Firebase Cloud Messaging delivers updates without exposing user identity.",
     icon: Bell,
   },
+  {
+    title: "Spam Prevention",
+    desc: "Preventing spam by Rate limiting via Cloud Functions.",
+    icon: Ban,
+  }
 ];
 
 const Privacy = () => {
