@@ -1,0 +1,120 @@
+.howitworks-section {
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    #f0fdf4 0%,
+    #ffffff 60%
+  );
+  overflow: hidden;
+}
+
+/* Decorative gradient blobs */
+.howitworks-section::before,
+.howitworks-section::after {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.35;
+  z-index: 0;
+}
+
+.howitworks-section::before {
+  background: #10b981;
+  top: -120px;
+  left: -120px;
+}
+
+.howitworks-section::after {
+  background: #34d399;
+  bottom: -120px;
+  right: -120px;
+}
+
+/* Flow container */
+.flow-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Connector line */
+.flow-container::before {
+  content: "";
+  position: absolute;
+  top: 42px;
+  left: 8%;
+  right: 8%;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    rgba(16, 185, 129, 0.2),
+    rgba(16, 185, 129, 0.7)
+  );
+}
+
+/* Flow item */
+.flow-item {
+  text-align: center;
+  position: relative;
+}
+
+.flow-icon {
+  width: 86px;
+  height: 86px;
+  margin: 0 auto;
+  background: white;
+  border: 2px solid rgba(16, 185, 129, 0.35);
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #059669;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.flow-item:hover .flow-icon {
+  background: #059669;
+  color: white;
+  transform: translateY(-6px);
+}
+
+/* Step number */
+.flow-step {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #ecfdf5;
+  color: #059669;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .flow-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .flow-container::before {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .flow-container {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
