@@ -1,5 +1,6 @@
 import Analytics from "../../admin/Analytics";
 import IssuesTable from "../../admin/IssuesTable";
+import Settings from "../../admin/Settings";
 import Sidebar from "../../admin/Sidebar";
 import StatsGrid from "../../admin/StatsGrid";
 import Topbar from "../../admin/Topbar";
@@ -8,13 +9,12 @@ import Topbar from "../../admin/Topbar";
 const AdminDashboard = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
-      
-      {/*<Topbar /> */}
 
       <main className=" p-6 pt-10">
         <StatsGrid />
         <IssuesTable />
         <Analytics />
+        <Settings/>
       </main>
     </div>
   );

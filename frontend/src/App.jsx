@@ -9,6 +9,7 @@ import IssueDetails from "./components/pages/IssueDetails";
 import SubmitIssue from "./components/pages/SubmitIssue";
 import AdminLogin from "./components/pages/AdminLogin";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import Settings from "./admin/Settings";
 
 
 
@@ -33,6 +34,7 @@ const App = () => {
         <Route path="issues" element={<Issues />} />
         <Route path="issues/:id" element={<IssueDetails />} />
         <Route path="analytics" element={<Analytics />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>
   );

@@ -15,9 +15,6 @@ import {
 } from 'recharts';
 import { TrendingUp, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
 
-/* ===============================
-   SAMPLE DATA (UNCHANGED)
-=============================== */
 const sampleIssues = [
   { id: "#CC101", category: "Hostel", location: "Block A", status: "Pending", date: "2025-03-10" },
   { id: "#CC102", category: "WiFi", location: "Library", status: "In Progress", date: "2025-03-09" },
@@ -34,18 +31,12 @@ const sampleIssues = [
 
 export default function Analytics() {
 
-  /* ===============================
-     CATEGORY DISTRIBUTION
-  =============================== */
   const categoryData = sampleIssues.reduce((acc, issue) => {
     const found = acc.find(i => i.category === issue.category);
     found ? found.count++ : acc.push({ category: issue.category, count: 1 });
     return acc;
   }, []);
 
-  /* ===============================
-     STATUS DISTRIBUTION (FIXED)
-  =============================== */
   const statusColors = {
     Pending: '#F59E0B',
     'In Progress': '#8B5CF6',
@@ -59,9 +50,6 @@ export default function Analytics() {
     color: statusColors[status]
   }));
 
-  /* ===============================
-     TIME TREND (FIXED LOGIC)
-  =============================== */
   const uniqueDates = [...new Set(sampleIssues.map(i => i.date))].sort();
 
   const timeData = uniqueDates.map(date => {
@@ -73,9 +61,6 @@ export default function Analytics() {
     };
   });
 
-  /* ===============================
-     LOCATION HEATMAP
-  =============================== */
   const locationData = sampleIssues.reduce((acc, issue) => {
     const mainLocation = issue.location.split('–')[0].trim();
     const found = acc.find(i => i.location === mainLocation);
@@ -83,19 +68,13 @@ export default function Analytics() {
     return acc;
   }, []);
 
-  /* ===============================
-     METRICS
-  =============================== */
   const totalIssues = sampleIssues.length;
   const resolvedIssues = sampleIssues.filter(i => i.status === 'Resolved').length;
   const resolutionRate = ((resolvedIssues / totalIssues) * 100).toFixed(1);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mt-4">
 
-      {/* ===============================
-         METRIC CARDS
-      =============================== */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Metric icon={<TrendingUp className="text-blue-600"/>} label="Total Reports" value={totalIssues} />
         <Metric icon={<CheckCircle className="text-green-600"/>} label="Resolution Rate" value={`${resolutionRate}%`} />
@@ -104,9 +83,6 @@ export default function Analytics() {
         <Metric icon={<Clock className="text-purple-600"/>} label="Avg Resolution Time" value="2.3 days" />
       </div>
 
-      {/* ===============================
-         CHARTS
-      =============================== */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {/* Category */}
@@ -167,9 +143,6 @@ export default function Analytics() {
   );
 }
 
-/* ===============================
-   SMALL REUSABLE COMPONENTS
-=============================== */
 function Metric({ icon, label, value }) {
   return (
     <div className="bg-white border rounded-lg p-5">
