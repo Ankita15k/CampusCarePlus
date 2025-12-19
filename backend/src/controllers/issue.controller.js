@@ -5,7 +5,7 @@ const uploadToCloudinary = require("../utils/uploadImage");
 
 const submitIssue = async (req, res) => {
   try {
-    const { name, description, category, anonymous, contact, location } = req.body;
+    const { name, description, category, anonymous, contact, location, id } = req.body;
 
     if (!description || !category) {
       return res.status(400).json({ message: "Description and category are required" });
@@ -20,6 +20,7 @@ const submitIssue = async (req, res) => {
     ]);
 
     const issueData = {
+      id:id,
       name: anonymous === "true" ? null : name,
       contact: anonymous === "true" ? null : contact,
       description,

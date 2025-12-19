@@ -85,6 +85,7 @@ const SubmitIssue = () => {
       formData.append("location", form.location);
       formData.append("token", captchaToken);
       formData.append("image", imageFile);
+      formData.append("id", form.reportId);
 
       const form_data = await submitIssue(formData);
 
