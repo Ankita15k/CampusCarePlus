@@ -10,10 +10,13 @@ import SubmitIssue from "./components/pages/SubmitIssue";
 import AdminLogin from "./components/pages/AdminLogin";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import Settings from "./admin/Settings";
+import { getAuthHeaders } from "./utils/getAuthtoken";
 
 
 
 const App = () => {
+
+  
   return (
     <Routes>
       {/* Public */}

@@ -27,7 +27,7 @@ const submitIssue = async (req, res) => {
       category,
       location: location || null,
       anonymous: anonymous === "true",
-
+      status:"pending",
     
       summary: aiData.summary,
       priority: aiData.priority,
@@ -56,4 +56,71 @@ const submitIssue = async (req, res) => {
   }
 };
 
-module.exports = submitIssue;
+const getIssueDetail = async (req,res)=>{
+ const { reportId } = req.params;
+ console.log(reportId)
+
+  const snapshot = await db
+    .collection("issues")
+    .where("id", "==", reportId)
+    .limit(1)
+    .get();
+
+  if (snapshot.empty) {
+    return res.status(404).json({ message: "Issue not found" });
+  }
+
+  const issue = snapshot.docs[0].data();
+
+
+  res.json({
+    reportId: issue.id,
+    title: issue.summary,
+    category:issue.category,
+    attachment:issue.imageUrl,
+    description: issue.description,
+    status: issue.status,
+    createdAt:issue.createdAt
+  ? issue.createdAt.toDate().toISOString()
+  : null,
+    submittedBy: issue.anonymous ? "anonymous": issue.name
+  });
+
+}
+
+const getAllIssues = async (req, res) => {
+  try {
+    const snapshot = await db
+      .collection("issues")
+      .orderBy("createdAt", "desc") // newest first
+      .get();
+
+    const issues = snapshot.docs.map(doc => {
+      const data = doc.data();
+
+      return {
+        id: data.id || doc.id, // use your custom reportId if present
+        category: data.category || null,
+        location: data.location || null,
+        status: data.status || null,
+        date: data.createdAt
+          ? data.createdAt.toDate().toISOString()
+          : null,
+      };
+    });
+
+    return res.status(200).json({
+      success: true,
+      count: issues.length,
+      issues,
+    });
+
+  } catch (error) {
+    console.error("Get All Issues Error:", error);
+    return res.status(500).json({ message: "Failed to fetch issues" });
+  }
+};
+
+
+module.exports = { getIssueDetail,submitIssue,getAllIssues
+};

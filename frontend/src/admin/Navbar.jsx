@@ -3,12 +3,22 @@ import { useNavigate } from "react-router-dom";
 import logout from "../utils/logout";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { getAllissues } from "../lib/apicalls";
 
 
 const Navbar = ({ onMenuClick }) => {
   const navigate = useNavigate();
   const [isLoading, setisLoading] = useState(false)
+   
 
+  const allIssues = async()=>{
+    const data = await getAllissues()
+    console.log(data)
+  }
+
+  allIssues();
+
+  
   const handleLogout = async () => {
     setisLoading(true)
     const success = await logout();

@@ -1,5 +1,6 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebase";
+import { getAuthHeaders } from "./getAuthtoken";
 
 const login = async (email, password) => {
   if (!email || !password) {
@@ -12,7 +13,7 @@ const login = async (email, password) => {
       email,
       password
     );
-
+  console.log(await getAuthHeaders())
     return userCredential.user;
   } catch (error) {
     console.error("Login failed:", error);

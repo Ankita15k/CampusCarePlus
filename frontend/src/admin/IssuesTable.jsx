@@ -4,7 +4,7 @@ import IssueStatusBadge from "./IssueStatusBadge";
 
 const issues = [
   {
-    id: "#CC101",
+    id: "CC-2025-X3VXRQ",
     category: "Hostel",
     location: "Block A",
     status: "Pending",
