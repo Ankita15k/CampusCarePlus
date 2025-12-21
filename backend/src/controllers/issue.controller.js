@@ -2,38 +2,36 @@ const { db, admin } = require("../config/firebase");
 const generateIssueMeta = require("../utils/geminiSummary");
 const uploadToCloudinary = require("../utils/uploadImage");
 
-
 const submitIssue = async (req, res) => {
   try {
-    const { name, description, category, anonymous, contact, location, id } = req.body;
+    const { name, description, category, anonymous, contact, location, id } =
+      req.body;
 
     if (!description || !category) {
-      return res.status(400).json({ message: "Description and category are required" });
+      return res
+        .status(400)
+        .json({ message: "Description and category are required" });
     }
 
-  
     const [aiData, imageResult] = await Promise.all([
       generateIssueMeta({ category, location, description }),
-      req.file
-        ? uploadToCloudinary(req.file.buffer)
-        : Promise.resolve(null),
+      req.file ? uploadToCloudinary(req.file.buffer) : Promise.resolve(null),
     ]);
 
     const issueData = {
-      id:id,
+      id: id,
       name: anonymous === "true" ? null : name,
       contact: anonymous === "true" ? null : contact,
       description,
       category,
       location: location || null,
       anonymous: anonymous === "true",
-      status:"pending",
-    
+      status: "Pending",
+
       summary: aiData.summary,
       priority: aiData.priority,
       aiReason: aiData.reason,
 
-    
       imageUrl: imageResult?.secure_url || null,
       imagePublicId: imageResult?.public_id || null,
 
@@ -49,16 +47,15 @@ const submitIssue = async (req, res) => {
       priority: aiData.priority,
       imageUrl: issueData.imageUrl,
     });
-
   } catch (error) {
     console.error("Submit Issue Error:", error);
     return res.status(500).json({ message: "Issue submission failed" });
   }
 };
 
-const getIssueDetail = async (req,res)=>{
- const { reportId } = req.params;
- console.log(reportId)
+const getIssueDetail = async (req, res) => {
+  const { reportId } = req.params;
+  console.log(reportId);
 
   const snapshot = await db
     .collection("issues")
@@ -72,22 +69,18 @@ const getIssueDetail = async (req,res)=>{
 
   const issue = snapshot.docs[0].data();
 
-
   res.json({
     reportId: issue.id,
     title: issue.summary,
-    category:issue.category,
-    attachment:issue.imageUrl,
+    category: issue.category,
+    attachment: issue.imageUrl,
     description: issue.description,
     status: issue.status,
-    location:issue.location,
-    createdAt:issue.createdAt
-  ? issue.createdAt.toDate().toISOString()
-  : null,
-    submittedBy: issue.anonymous ? "anonymous": issue.name
+    location: issue.location,
+    createdAt: issue.createdAt ? issue.createdAt.toDate().toISOString() : null,
+    submittedBy: issue.anonymous ? "anonymous" : issue.name,
   });
-
-}
+};
 
 const getAllIssues = async (req, res) => {
   try {
@@ -96,7 +89,7 @@ const getAllIssues = async (req, res) => {
       .orderBy("createdAt", "desc") // newest first
       .get();
 
-    const issues = snapshot.docs.map(doc => {
+    const issues = snapshot.docs.map((doc) => {
       const data = doc.data();
 
       return {
@@ -104,9 +97,7 @@ const getAllIssues = async (req, res) => {
         category: data.category || null,
         location: data.location || null,
         status: data.status || null,
-        date: data.createdAt
-          ? data.createdAt.toDate().toISOString()
-          : null,
+        date: data.createdAt ? data.createdAt.toDate().toISOString() : null,
       };
     });
 
@@ -115,16 +106,15 @@ const getAllIssues = async (req, res) => {
       count: issues.length,
       issues,
     });
-
   } catch (error) {
     console.error("Get All Issues Error:", error);
     return res.status(500).json({ message: "Failed to fetch issues" });
   }
 };
 
-const getIssueDetailAdmin = async (req,res)=>{
- const { reportId } = req.params;
- console.log(reportId)
+const getIssueDetailAdmin = async (req, res) => {
+  const { reportId } = req.params;
+  console.log(reportId);
 
   const snapshot = await db
     .collection("issues")
@@ -138,26 +128,64 @@ const getIssueDetailAdmin = async (req,res)=>{
 
   const issue = snapshot.docs[0].data();
 
-
   res.json({
     reportId: issue.id,
-    aiSummary:issue.aiReason,
-    contact:issue.contact,
+    aiSummary: issue.aiReason,
+    contact: issue.contact,
     title: issue.summary,
-    category:issue.category,
-    attachment:issue.imageUrl,
+    category: issue.category,
+    attachment: issue.imageUrl,
     description: issue.description,
-    location:issue.location,
+    location: issue.location,
     status: issue.status,
-    priority:issue.priority,
-    createdAt:issue.createdAt
-  ? issue.createdAt.toDate().toISOString()
-  : null,
-    submittedBy: issue.anonymous ? "anonymous": issue.name
+    priority: issue.priority,
+    createdAt: issue.createdAt ? issue.createdAt.toDate().toISOString() : null,
+    submittedBy: issue.anonymous ? "anonymous" : issue.name,
   });
+};
 
-}
+const updateIssue = async (req, res) => {
+  try {
+    const { issueId } = req.params;
 
+  
+    const {
+      status,
+      adminRemark,
 
-module.exports = { getIssueDetail,submitIssue,getAllIssues,getIssueDetailAdmin
+      resolvedAt,
+      priority,
+    } = req.body;
+
+    const updateData = {
+      ...(status && { status }),
+      ...(priority && { priority }),
+      ...(adminRemark && { adminRemark }),
+      ...(resolvedAt && { resolvedAt }),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
+
+    if (Object.keys(updateData).length === 1) {
+      return res.status(400).json({ message: "No valid fields to update" });
+    }
+
+    await db.collection("issues").doc(issueId).update(updateData);
+
+    return res.status(200).json({
+      success: true,
+      message: "Issue updated successfully",
+      updatedFields: updateData,
+    });
+  } catch (error) {
+    console.error("Admin Update Error:", error);
+    return res.status(500).json({ message: "Failed to update issue" });
+  }
+};
+
+module.exports = {
+  getIssueDetail,
+  submitIssue,
+  getAllIssues,
+  getIssueDetailAdmin,
+  updateIssue
 };
