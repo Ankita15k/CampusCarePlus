@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, X, ShieldCheck, LogIn } from "lucide-react";
+import { Menu, X, ShieldCheck, LogIn, FlagTriangleRight } from "lucide-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
-            <NavLink label="Features" sectionId="features" />
+            <NavLink label="Track Issue" sectionId="track-issue" />
             <NavLink label="How It Works" sectionId="how-it-works" />
             <NavLink label="Categories" sectionId="categories" />
             <NavLink label="Privacy" sectionId="privacy" />
@@ -102,8 +102,9 @@ const Navbar = () => {
 
           <button
             onClick={() => navigate("/issues/report")}
-            className="bg-emerald-600 text-white px-4 py-2 rounded-lg font-semibold"
+            className="flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg font-semibold"
           >
+            <FlagTriangleRight size={18} />
             Report Issue
           </button>
         </div>
