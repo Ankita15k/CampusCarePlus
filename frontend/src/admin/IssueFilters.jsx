@@ -1,49 +1,92 @@
+import { Filter, RotateCcw } from "lucide-react";
+
 const IssueFilters = ({ filters, setFilters }) => {
+
+  const handleChange = (key, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [key]: value
+    }));
+  };
+
+  const handleReset = () => {
+    setFilters({
+      category: "",
+      priority: "",
+      status: "",
+      date: ""
+    });
+  };
+
   return (
-    <div className="bg-white p-4 rounded-xl shadow mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
-      <select
-        className="border p-2 rounded"
-        value={filters.category}
-        onChange={(e) =>
-          setFilters({ ...filters, category: e.target.value })
-        }
-      >
-        <option value="">All Categories</option>
-        <option>Hostel</option>
-        <option>WiFi</option>
-        <option>Hygiene</option>
-      </select>
+    <div className="bg-white rounded-2xl shadow-sm border p-5 mb-6">
 
-      <select
-        className="border p-2 rounded"
-        value={filters.priority}
-        onChange={(e) =>
-          setFilters({ ...filters, priority: e.target.value })
-        }
-      >
-        <option value="">All Priorities</option>
-        <option>High</option>
-        <option>Medium</option>
-        <option>Low</option>
-      </select>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2 text-gray-700 font-semibold">
+          <Filter size={18} />
+          Issue Filters
+        </div>
 
-      <input
-        type="date"
-        className="border p-2 rounded"
-        value={filters.date}
-        onChange={(e) =>
-          setFilters({ ...filters, date: e.target.value })
-        }
-      />
+        <button
+          onClick={handleReset}
+          className="flex items-center gap-1 text-sm text-gray-500 hover:text-red-600 transition"
+        >
+          <RotateCcw size={14} />
+          Reset
+        </button>
+      </div>
 
-      <button
-        onClick={() =>
-          setFilters({ category: "", priority: "", date: "" })
-        }
-        className="bg-gray-100 rounded hover:bg-gray-200"
-      >
-        Reset
-      </button>
+      {/* Filters */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+
+        {/* Category */}
+        <select
+          value={filters.category}
+          onChange={(e) => handleChange("category", e.target.value)}
+          className="filter-input"
+        >
+          <option value="">All Categories</option>
+          <option value="Hostel">Hostel</option>
+          <option value="WiFi">WiFi</option>
+          <option value="Hygiene">Hygiene</option>
+          <option value="Infrastructure">Infrastructure</option>
+          <option value="Security">Security</option>
+        </select>
+
+        {/* Priority */}
+        <select
+          value={filters.priority}
+          onChange={(e) => handleChange("priority", e.target.value)}
+          className="filter-input"
+        >
+          <option value="">All Priorities</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+
+        {/* Status */}
+        <select
+          value={filters.status}
+          onChange={(e) => handleChange("status", e.target.value)}
+          className="filter-input"
+        >
+          <option value="">All Status</option>
+          <option value="Pending">Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Resolved">Resolved</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+
+        {/* Date */}
+        <input
+          type="date"
+          value={filters.date}
+          onChange={(e) => handleChange("date", e.target.value)}
+          className="filter-input"
+        />
+      </div>
     </div>
   );
 };

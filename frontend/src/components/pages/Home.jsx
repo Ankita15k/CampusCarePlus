@@ -7,6 +7,7 @@ import Navbar from "../home/Navbar";
 import Privacy from "../home/Privacy";
 import Problem from "../home/Problem";
 import Solution from "../home/Solution";
+import TrackIssue from "./TrackIssue";
 
 const Home = () => {
   return (
@@ -16,11 +17,13 @@ const Home = () => {
       {/* Offset for fixed navbar */}
       <div className="pt-16 bg-gray-50 text-gray-900">
         <Hero />
+        
+        <section id="track-issue" className="pt-24">
+          <TrackIssue/>
+        </section>
 
-        <section id="features" className="pt-24">
           <Problem />
           <Solution />
-        </section>
         <section id="how-it-works" className="pt-24">
           <HowItWorks />
         </section>
