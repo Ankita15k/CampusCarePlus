@@ -25,7 +25,7 @@ export const getIssueDetailByAdmin = async (id)=>{
       headers: await getAuthHeaders()
     })
 
-    // console.log(issueDetail.data)
+    console.log(issueDetail.data)
     return issueDetail.data
 
 

@@ -2,38 +2,36 @@ const { db, admin } = require("../config/firebase");
 const generateIssueMeta = require("../utils/geminiSummary");
 const uploadToCloudinary = require("../utils/uploadImage");
 
-
 const submitIssue = async (req, res) => {
   try {
-    const { name, description, category, anonymous, contact, location, id } = req.body;
+    const { name, description, category, anonymous, contact, location, id } =
+      req.body;
 
     if (!description || !category) {
-      return res.status(400).json({ message: "Description and category are required" });
+      return res
+        .status(400)
+        .json({ message: "Description and category are required" });
     }
 
-  
     const [aiData, imageResult] = await Promise.all([
       generateIssueMeta({ category, location, description }),
-      req.file
-        ? uploadToCloudinary(req.file.buffer)
-        : Promise.resolve(null),
+      req.file ? uploadToCloudinary(req.file.buffer) : Promise.resolve(null),
     ]);
 
     const issueData = {
-      id:id,
+      id: id,
       name: anonymous === "true" ? null : name,
       contact: anonymous === "true" ? null : contact,
       description,
       category,
       location: location || null,
       anonymous: anonymous === "true",
-      status:"pending",
-    
+      status: "pending",
+
       summary: aiData.summary,
       priority: aiData.priority,
       aiReason: aiData.reason,
 
-    
       imageUrl: imageResult?.secure_url || null,
       imagePublicId: imageResult?.public_id || null,
 
@@ -49,16 +47,15 @@ const submitIssue = async (req, res) => {
       priority: aiData.priority,
       imageUrl: issueData.imageUrl,
     });
-
   } catch (error) {
     console.error("Submit Issue Error:", error);
     return res.status(500).json({ message: "Issue submission failed" });
   }
 };
 
-const getIssueDetail = async (req,res)=>{
- const { reportId } = req.params;
- console.log(reportId)
+const getIssueDetail = async (req, res) => {
+  const { reportId } = req.params;
+  console.log(reportId);
 
   const snapshot = await db
     .collection("issues")
@@ -72,22 +69,19 @@ const getIssueDetail = async (req,res)=>{
 
   const issue = snapshot.docs[0].data();
 
-
+  console.log(issue);
   res.json({
     reportId: issue.id,
     title: issue.summary,
-    category:issue.category,
-    attachment:issue.imageUrl,
+    category: issue.category,
+    attachment: issue.imageUrl,
     description: issue.description,
     status: issue.status,
-    location:issue.location,
-    createdAt:issue.createdAt
-  ? issue.createdAt.toDate().toISOString()
-  : null,
-    submittedBy: issue.anonymous ? "anonymous": issue.name
+    location: issue.location,
+    createdAt: issue.createdAt ? issue.createdAt.toDate().toISOString() : null,
+    submittedBy: issue.anonymous ? "anonymous" : issue.name,
   });
-
-}
+};
 
 const getAllIssues = async (req, res) => {
   try {
@@ -96,18 +90,16 @@ const getAllIssues = async (req, res) => {
       .orderBy("createdAt", "desc") // newest first
       .get();
 
-    const issues = snapshot.docs.map(doc => {
+    const issues = snapshot.docs.map((doc) => {
       const data = doc.data();
 
       return {
-        id: data.id || doc.id, 
+        id: data.id || doc.id,
         category: data.category || null,
         location: data.location || null,
         status: data.status || null,
-        priority:data.priority || null,
-        date: data.createdAt
-          ? data.createdAt.toDate().toISOString()
-          : null,
+        priority: data.priority || null,
+        date: data.createdAt ? data.createdAt.toDate().toISOString() : null,
       };
     });
 
@@ -116,16 +108,15 @@ const getAllIssues = async (req, res) => {
       count: issues.length,
       issues,
     });
-
   } catch (error) {
     console.error("Get All Issues Error:", error);
     return res.status(500).json({ message: "Failed to fetch issues" });
   }
 };
 
-const getIssueDetailAdmin = async (req,res)=>{
- const { reportId } = req.params;
-//  console.log(reportId)
+const getIssueDetailAdmin = async (req, res) => {
+  const { reportId } = req.params;
+  //  console.log(reportId)
 
   const snapshot = await db
     .collection("issues")
@@ -139,30 +130,31 @@ const getIssueDetailAdmin = async (req,res)=>{
 
   const issue = snapshot.docs[0].data();
 
-
   res.json({
     reportId: issue.id,
-    aiSummary:issue.aiReason,
-    contact:issue.contact,
+    aiSummary: issue.aiReason,
+    contact: issue.contact,
     title: issue.summary,
-    category:issue.category,
-    attachment:issue.imageUrl,
+    category: issue.category,
+    attachment: issue.imageUrl,
     description: issue.description,
-    location:issue.location,
+    location: issue.location,
     status: issue.status,
-    priority:issue.priority,
-    createdAt:issue.createdAt
-  ? issue.createdAt.toDate().toISOString()
-  : null,
-    submittedBy: issue.anonymous ? "anonymous": issue.name
+    priority: issue.priority,
+    resolvingRemark: issue.resolvingRemark,
+    resolvedAt:issue.resolvedAt && issue.resolvedAt.toDate().toISOString(),
+    processingRemark: issue.processingRemark,
+    inProgressAt:issue.inProgressAt && issue.inProgressAt.toDate().toISOString(),
+    rejectionemark: issue.rejectionemark,
+    rejectedAt:issue.rejectedAt && issue.rejectedAt.toDate().toISOString(),
+    createdAt: issue.createdAt ? issue.createdAt.toDate().toISOString() : null,
+    submittedBy: issue.anonymous ? "anonymous" : issue.name,
   });
-
-}
+};
 
 const markResolved = async (req, res) => {
   const { reportId } = req.params;
   const { remark } = req.body;
-
 
   if (!reportId || !remark) {
     return res.status(400).json({
@@ -171,7 +163,6 @@ const markResolved = async (req, res) => {
   }
 
   try {
-    
     const snapshot = await db
       .collection("issues")
       .where("id", "==", reportId)
@@ -184,14 +175,12 @@ const markResolved = async (req, res) => {
       });
     }
 
-    
     const issueDoc = snapshot.docs[0];
     const issueRef = db.collection("issues").doc(issueDoc.id);
 
-    
     await issueRef.update({
       status: "Resolved",
-      remark: remark,
+      resolvingRemark: remark,
       resolvedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
@@ -212,7 +201,6 @@ const markInProgress = async (req, res) => {
   const { reportId } = req.params;
   const { remark } = req.body;
 
-
   if (!reportId || !remark) {
     return res.status(400).json({
       message: "Report ID and remark are required",
@@ -220,7 +208,6 @@ const markInProgress = async (req, res) => {
   }
 
   try {
-  
     const snapshot = await db
       .collection("issues")
       .where("id", "==", reportId)
@@ -237,17 +224,15 @@ const markInProgress = async (req, res) => {
     const issueRef = db.collection("issues").doc(issueDoc.id);
     const issueData = issueDoc.data();
 
-
     if (issueData.status === "Resolved") {
       return res.status(400).json({
         message: "Resolved issue cannot be moved back to In Progress",
       });
     }
 
-
     await issueRef.update({
       status: "In Progress",
-      remark: remark,
+      processingRemark: remark,
       inProgressAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
@@ -268,7 +253,6 @@ const markRejected = async (req, res) => {
   const { reportId } = req.params;
   const { remark } = req.body;
 
-
   if (!reportId || !remark) {
     return res.status(400).json({
       message: "Report ID and remark are required",
@@ -276,7 +260,6 @@ const markRejected = async (req, res) => {
   }
 
   try {
-
     const snapshot = await db
       .collection("issues")
       .where("id", "==", reportId)
@@ -293,7 +276,6 @@ const markRejected = async (req, res) => {
     const issueRef = db.collection("issues").doc(issueDoc.id);
     const issueData = issueDoc.data();
 
-  
     if (issueData.status === "Resolved") {
       return res.status(400).json({
         message: "Resolved issue cannot be rejected",
@@ -308,7 +290,7 @@ const markRejected = async (req, res) => {
 
     await issueRef.update({
       status: "Rejected",
-      remark: remark,
+      rejectionemark: remark,
       rejectedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
@@ -326,15 +308,12 @@ const markRejected = async (req, res) => {
 };
 
 
-
-module.exports = { markRejected };
-
-
-
-module.exports = { markInProgress };
-
-
-module.exports = { markResolved };
-
-module.exports = { getIssueDetail,submitIssue,getAllIssues,getIssueDetailAdmin ,markResolved, markInProgress , markRejected
+module.exports = {
+  getIssueDetail,
+  submitIssue,
+  getAllIssues,
+  getIssueDetailAdmin,
+  markResolved,
+  markInProgress,
+  markRejected,
 };
