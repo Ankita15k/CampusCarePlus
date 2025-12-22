@@ -1,7 +1,7 @@
 const express = require("express");
 const upload = require("../middlewares/upload");
 const tokenVerify = require("../middlewares/recaptcha");
-const {submitIssue, getIssueDetail, getAllIssues, getIssueDetailAdmin , markResolved} = require("../controllers/issue.controller");
+const {submitIssue, getIssueDetail, getAllIssues, getIssueDetailAdmin , markResolved, markInProgress, markRejected} = require("../controllers/issue.controller");
 const adminAuth = require("../middlewares/adminAuth");
 
 
@@ -21,4 +21,6 @@ router
 
   // update issues
   .put("/admin/issues/resolve/:reportId", adminAuth, markResolved)
+  .put("/admin/issues/progress/:reportId", adminAuth, markInProgress)
+  .put("/admin/issues/reject/:reportId", adminAuth, markRejected)
 module.exports = router;
