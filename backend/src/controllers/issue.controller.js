@@ -55,7 +55,7 @@ const submitIssue = async (req, res) => {
 
 const getIssueDetail = async (req, res) => {
   const { reportId } = req.params;
-  console.log(reportId);
+  // console.log(reportId);
 
   const snapshot = await db
     .collection("issues")
@@ -69,7 +69,7 @@ const getIssueDetail = async (req, res) => {
 
   const issue = snapshot.docs[0].data();
 
-  console.log(issue);
+  // console.log(issue);
   res.json({
     reportId: issue.id,
     title: issue.summary,
@@ -78,6 +78,12 @@ const getIssueDetail = async (req, res) => {
     description: issue.description,
     status: issue.status,
     location: issue.location,
+    resolvingRemark: issue.resolvingRemark ? issue.resolvingRemark : null,
+    resolvedAt:issue.resolvedAt ? issue.resolvedAt.toDate().toISOString() : null,
+    processingRemark: issue.processingRemark ? issue.processingRemark : null,
+    inProgressAt:issue.inProgressAt ? issue.inProgressAt.toDate().toISOString() : null,
+    rejectionemark: issue.rejectionemark ? issue.rejectionemark : null,
+    rejectedAt:issue.rejectedAt ? issue.rejectedAt.toDate().toISOString():null,
     createdAt: issue.createdAt ? issue.createdAt.toDate().toISOString() : null,
     submittedBy: issue.anonymous ? "anonymous" : issue.name,
   });

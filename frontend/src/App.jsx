@@ -10,7 +10,7 @@ import SubmitIssue from "./components/pages/SubmitIssue";
 import AdminLogin from "./components/pages/AdminLogin";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import Settings from "./admin/Settings";
-import { getAuthHeaders } from "./utils/getAuthtoken";
+import TrackIssuePage from "./components/track-issue/TrackIssuePage";
 
 
 
@@ -23,6 +23,7 @@ const App = () => {
       <Route path="/" element={<Home />} />
       <Route path="/issues/report" element={<SubmitIssue />} />
       <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/issue/details" element={<TrackIssuePage />} />
 
       {/* Protected Admin */}
       <Route
