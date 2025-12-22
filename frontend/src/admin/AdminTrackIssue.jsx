@@ -72,8 +72,8 @@ const AdminTrackIssue = ({ onClose }) => {
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-              <Info icon={<FileText size={18} />} label="Summary" value={issue.summary} />
-              <Info icon={<Brain size={18} />} label="AI Priority Reason" value={issue.aiReason} />
+              <Info icon={<FileText size={18} />} label="Summary" value={issue.title} />
+              <Info icon={<Brain size={18} />} label="AI Priority Reason" value={issue.aiSummary} />
               <Info icon={<User size={18} />} label="Submitted By" value={issue.submittedBy} />
               <Info icon={<FileText size={18} />} label="Category" value={issue.category} />
               <Info icon={<FileText size={18} />} label="Location" value={issue.location} />
