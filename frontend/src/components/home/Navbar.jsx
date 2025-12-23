@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, X, ShieldCheck, LogIn, FlagTriangleRight } from "lucide-react";
+import { Menu, X, ShieldCheck, LogIn, FlagTriangleRight, BadgeAlert } from "lucide-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -62,8 +62,9 @@ const Navbar = () => {
 
             <button
               onClick={() => navigate("/issues/report")}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg cursor-pointer transition font-semibold"
+              className="flex items-center gap-2 bg-emerald-600 border border-emerald-700 text-white px-5 py-2 rounded-lg cursor-pointer hover:bg-white hover:text-emerald-700 transition"
             >
+              <BadgeAlert />
               Report Issue
             </button>
           </div>

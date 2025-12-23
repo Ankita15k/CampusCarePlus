@@ -13,12 +13,12 @@
 .track-header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .track-header h1 {
-  font-size: 28px;
+  font-size: 1.8rem;
   color: #065f46;
 }
 
@@ -48,15 +48,8 @@
   border: 1px solid #d1fae5;
 }
 
-.search-card button {
-  background: #059669;
-  color: white;
-  border-radius: 12px;
-  padding: 12px 18px;
-}
-
 .glass-card {
-  margin-top: 24px;
+  margin-top: 1rem;
   background: rgba(255,255,255,0.85);
   backdrop-filter: blur(10px);
   border-radius: 20px;
@@ -132,19 +125,11 @@
   font-size: 15px;
 }
 
-.search-card button {
-  background: #059669;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
 .hero-card-detail {
   background: white;
-  padding: 24px;
-  border-radius: 20px;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
   box-shadow: 0 14px 35px rgba(0,0,0,.08);
 }
 
@@ -173,11 +158,12 @@
   display: flex;
   gap: 10px;
   align-items: center;
+  font-size: medium;
 }
 
 .glass-card {
   background: white;
-  padding: 22px;
+  padding: 1.3rem;
   border-radius: 18px;
   box-shadow: 0 12px 30px rgba(0,0,0,.08);
 }
@@ -201,7 +187,7 @@
 }
 
 .step-icon {
-  margin-bottom: 8px;
+  margin-bottom: 0.4rem;
 }
 
 .remark {
@@ -235,7 +221,6 @@ ejected {
 .progress-line {
   display: flex;
   justify-content: space-between;
-  margin-top: 24px;
 }
 
 .step {
@@ -244,8 +229,8 @@ ejected {
 }
 
 .step-icon {
-  width: 50px;
-  height: 50px;
+  width: 2rem;
+  height: 2rem;
   background: #e5e7eb;
   border-radius: 50%;
   display: flex;
@@ -254,7 +239,7 @@ ejected {
   margin: auto;
 }
 
-.step.active .step-icon { background: #3b82f6; color: white; }
+.step.active .step-icon { background: #7ca6e4; color: white; }
 .step.success .step-icon { background: #10b981; color: white; }
 .step.error .step-icon { background: #ef4444; color: white; }
 

@@ -5,9 +5,9 @@ const IssueAttachment = ({ image }) => {
 
   return (
     <div className="glass-card">
-      <div className="section-header">
+      <div className="flex items-center gap-2 font-semibold text-gray-900">
         <ImageIcon size={18} />
-        <span>Attached Evidence</span>
+        <span>Attached Evidence : </span>
       </div>
 
       <img

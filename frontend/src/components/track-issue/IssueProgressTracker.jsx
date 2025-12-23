@@ -1,4 +1,4 @@
-import { CheckCircle, Clock, XCircle } from "lucide-react";
+import { BadgeCheck, CheckCheck, CircleCheck, ClockFading, XCircle } from "lucide-react";
 
 const IssueProgressTracker = ({ issue }) => {
   if (!issue) return null;
@@ -13,13 +13,13 @@ const IssueProgressTracker = ({ issue }) => {
 
   return (
     <div className="glass-card">
-      <h3>Issue Progress</h3>
+      <h3>Issue Progress : </h3>
 
       <div className="progress-line">
-        <Step icon={<CheckCircle />} label="Created" done />
+        <Step icon={<CircleCheck />} label="Created" done />
 
         <Step
-          icon={<Clock />}
+          icon={<ClockFading />}
           label="In Progress"
           done={!!inProgressAt}
           remark={processingRemark}
@@ -27,7 +27,7 @@ const IssueProgressTracker = ({ issue }) => {
 
         {status === "Resolved" && (
           <Step
-            icon={<CheckCircle />}
+            icon={<BadgeCheck />}
             label="Resolved"
             done
             success

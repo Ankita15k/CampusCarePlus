@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { Search, Clock, CheckCircle, XCircle } from "lucide-react";
+import { Search, Clock, CheckCircle, XCircle, ClockFading } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const statusConfig = {
   Pending: {
     color: "text-yellow-700 bg-yellow-100",
+    icon: <ClockFading size={18} />,
+  },
+  "In Progress" : {
+    color: "text-blue-700 bg-blue-100",
     icon: <Clock size={18} />,
   },
   Resolved: {
