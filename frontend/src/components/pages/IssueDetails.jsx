@@ -144,7 +144,7 @@ const IssueDetails = () => {
               {issue.rejectedAt && (
                 <>
                   <ActionMeta label="Rejected On" value={issue.rejectedAt} />
-                  <RemarkBlock title="Rejection Remark" remark={issue.rejectionRemark} />
+                  <RemarkBlock title="Rejection Remark" remark={issue.rejectionemark} />
                 </>
               )}
             </div>

@@ -60,7 +60,7 @@ const submitIssue = async (req, res) => {
           data: {
             issueId: id,
             type: "ISSUE_SUBMITTED",
-            url: `/track/${id}`,
+            url: `/track/issue/${id}`,
           },
         });
       } catch (notifyErr) {

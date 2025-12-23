@@ -20,14 +20,13 @@ const sendNotification = async ({
   }
 
   const message = {
-    token,
-    notification: {
-      title,
-      body,
-    
-    },
-    data: safeData,
-  };
+  token,
+  data: {
+    title,
+    body,
+    ...safeData,
+  },
+};
 
   try {
     const response = await admin.messaging().send(message);
