@@ -3,8 +3,12 @@ import IssueFilters from "../../admin/IssueFilters";
 import IssuesTable from "../../admin/IssuesTable";
 import useAllIssues from "../../hooks/UseAllissues";
 import IssueDetailsLoader from "../../admin/IssueDetailsLoader";
+import IssueSearchBar from "../../admin/IssueSearchBar";
+import SearchOverlay from "../../admin/SearchOverlay";
+import UseIssueSearch from "../../hooks/UseIssueSearch";
 
 const Issues = () => {
+
   const { isLoading, allIssues } = useAllIssues();
   const [filters, setFilters] = useState({
     category: "",
@@ -12,6 +16,12 @@ const Issues = () => {
     status: "",
     date: "",
   });
+
+  
+  const [searchQuery, setSearchQuery] = useState("");
+const [openSearch, setOpenSearch] = useState(false);
+
+const searchResults = UseIssueSearch(allIssues, searchQuery);
 
   if (isLoading) return <IssueDetailsLoader />;
 
@@ -33,6 +43,22 @@ const Issues = () => {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">All Issues</h1>
+
+      <div className="flex justify-center ">
+        <IssueSearchBar
+        value={searchQuery}
+        onChange={setSearchQuery}
+        onOpen={setOpenSearch}
+        />
+      </div>
+
+      {openSearch && (
+        <SearchOverlay
+          query={searchQuery}
+          results={searchResults}
+          onClose={() => setOpenSearch(false)}
+        />
+      )}
 
       <IssueFilters filters={filters} setFilters={setFilters} />
 

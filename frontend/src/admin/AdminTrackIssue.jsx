@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, X, FileText, Brain, User, Image } from "lucide-react";
+import { Search, X, Brain, User, Image, MapPin, Calendar, ScrollText, GalleryVertical, FileCheck2, ImageIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import adminTrackIssue from "../utils/adminTrackIssue";
 import IssueStatusBadge from "../admin/IssueStatusBadge";
@@ -51,7 +51,7 @@ const AdminTrackIssue = ({ onClose }) => {
           />
           <button
             onClick={handleSearch}
-            className="bg-gray-900 text-white px-4 rounded-lg"
+            className="bg-emerald-700 text-white px-4 rounded-lg"
           >
             <Search />
           </button>
@@ -71,27 +71,33 @@ const AdminTrackIssue = ({ onClose }) => {
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-              <Info icon={<FileText size={18} />} label="Summary" value={issue.title} />
-              <Info icon={<Brain size={18} />} label="AI Priority Reason" value={issue.aiSummary} />
               <Info icon={<User size={18} />} label="Submitted By" value={issue.submittedBy} />
-              <Info icon={<FileText size={18} />} label="Category" value={issue.category} />
-              <Info icon={<FileText size={18} />} label="Location" value={issue.location} />
-              <Info icon={<FileText size={18} />} label="Created At"
+              
+              <Info icon={<MapPin size={18} />} label="Location" value={issue.location} />
+
+              <Info icon={<Calendar size={18} />} label="Created At"
                 value={new Date(issue.createdAt).toLocaleString("en-IN")}
               />
+              
+              <Info icon={<GalleryVertical size={18} />} label="Category" value={issue.category} />
+              
+              
+              
             </div>
 
             {/* Description */}
-            <div>
-              <h4 className="font-semibold mb-1">Full Description</h4>
-              <p className="text-gray-700">{issue.description}</p>
+            <div className="grid gap-6">
+              <Info icon={<ScrollText size={18} />} label="Full Description :" value={issue.description} />
+
+              <Info icon={<Brain size={18} />} label="AI Priority Reason :" value={issue.aiSummary} />
+
+              <Info icon={<FileCheck2 size={18} />} label="AI Summary :" value={issue.title} />
             </div>
 
             {/* Attachment */}
             {issue.attachment && (
               <div>
-                <h4 className="font-semibold mb-1">Attachment</h4>
+                <h4 className="text-sm text-gray-500 flex gap-2 mb-1"><ImageIcon size={18} />Attachment :</h4>
                 <img
                   src={issue.attachment}
                   alt="Evidence"

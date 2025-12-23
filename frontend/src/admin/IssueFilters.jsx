@@ -18,7 +18,8 @@ const IssueFilters = ({ filters, setFilters }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border p-5 mb-6">
+    <>
+    <div className="bg-white rounded-2xl shadow-sm border p-5 mb-6">   
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-gray-700 font-semibold">
           <Filter size={18} />
@@ -86,6 +87,7 @@ const IssueFilters = ({ filters, setFilters }) => {
         />
       </div>
     </div>
+    </>
   );
 };
 

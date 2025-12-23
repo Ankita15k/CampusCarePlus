@@ -1,28 +1,6 @@
 import { useState } from "react";
 import { Search, Clock, CheckCircle, XCircle } from "lucide-react";
 
-/* MOCK DATA */
-const mockIssues = [
-  {
-    reportId: "CC-2025-AX91",
-    status: "Pending",
-    description:
-      "Water leakage near the wash basin causing unhygienic conditions.",
-  },
-  {
-    reportId: "CC-2025-BX22",
-    status: "Resolved",
-    description:
-      "WiFi connectivity issue in library has been fixed.",
-  },
-  {
-    reportId: "CC-2025-RJ77",
-    status: "Rejected",
-    description:
-      "Duplicate issue already reported earlier.",
-  },
-];
-
 const statusConfig = {
   Pending: {
     color: "text-yellow-700 bg-yellow-100",

@@ -44,7 +44,7 @@ const IssuesTable = ({ issues }) => {
               <td>{dateFormatter(issue.date)}</td>
               <td>
                 <button
-                  className="flex items-center gap-1.5 text-sm text-blue-600 hover:underline"
+                  className="flex items-center gap-1.5 cursor-pointer text-sm text-blue-600 hover:underline"
                   onClick={() =>
                     navigate(`/admin/issues/${issue.id}`)
                   }
