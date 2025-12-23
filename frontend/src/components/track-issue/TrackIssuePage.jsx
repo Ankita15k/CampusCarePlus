@@ -1,38 +1,52 @@
 import "./trackIssue.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import TrackSearchBar from "./TrackSearchBar";
+import { useNavigate, useParams } from "react-router-dom";
 import IssueHeroCard from "./IssueHeroCard";
 import IssueProgressTracker from "./IssueProgressTracker";
 import IssueDescription from "./IssueDescription";
 import IssueAttachment from "./IssueAttachment";
 import { getIssueDetailByUSer } from "../../lib/apicalls";
 import toast from "react-hot-toast";
+import IssueNotFound from "./IssueNotFound";
 
 const TrackIssuePage = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [issue, setIssue] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  const handleSearch = async (reportId) => {
-    if (!reportId) return;
-    setLoading(true);
-    setIssue(null);
+  const [issue, setIssue] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+
+useEffect(() => {
+  const fetchIssue = async () => {
+    if (!id) {
+      toast.error("Invalid report ID");
+      setNotFound(true);
+      setLoading(false);
+      return;
+    }
 
     try {
-      const res = await getIssueDetailByUSer(reportId);
+      const res = await getIssueDetailByUSer(id);
+
       if (!res) {
-        toast.error("No issue found");
-        return;
+        // toast.error("No issue found");
+        setNotFound(true);
+      } else {
+        setIssue(res);
+        setNotFound(false);
       }
-      setIssue(res);
-    } catch {
-      toast.error("Failed to fetch issue");
+    } catch (error) {
+      // toast.error("Failed to fetch issue");
+      setNotFound(true);
     } finally {
       setLoading(false);
     }
   };
+
+  fetchIssue();
+}, [id]);
 
   return (
     <div className="track-bg">
@@ -44,9 +58,18 @@ const TrackIssuePage = () => {
           <h1>Track Your Issue</h1>
         </header>
 
-        <TrackSearchBar onSearch={handleSearch} loading={loading} />
+        {/* 🔄 Loading Bar */}
+        {loading && (
+          <div className="loading-wrapper">
+            <div className="loading-bar" />
+            <p>Fetching issue details...</p>
+          </div>
+        )}
 
-        {issue && (
+        {!loading && notFound && <IssueNotFound id={id} />}
+
+        {/* 📄 Issue Data */}
+        {!loading && issue && (
           <>
             <IssueHeroCard issue={issue} />
             <IssueProgressTracker issue={issue} />

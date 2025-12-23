@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Search, Clock, CheckCircle, XCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const statusConfig = {
   Pending: {
@@ -21,26 +22,23 @@ const TrackIssue = () => {
   const [reportId, setReportId] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSearch = () => {
-    const issue = mockIssues.find(
-      (i) => i.reportId.toLowerCase() === reportId.toLowerCase()
-    );
-
-    if (!issue) {
-      setResult(null);
-      setError("No issue found with this Report ID.");
-      return;
-    }
-
-    setError("");
-    setResult(issue);
+    
+  if(reportId.length !=14 ){
+    setError("Plase enter valid Report Id")
+    return
+  }
+   
+  navigate(`/track/issue/${reportId}`)
+  
   };
 
   return (
-    <div className="mt-1 text-center">
+    <div className="mt-10 text-center ">
 
-      {/* Button */}
+    
       <button
         onClick={() => setOpen(!open)}
         className="bg-emerald-700 hover:bg-emerald-800 cursor-pointer text-white px-6 py-3 rounded-xl font-semibold transition"
@@ -48,7 +46,7 @@ const TrackIssue = () => {
         Track Your Issue
       </button>
 
-      {/* Search Panel */}
+    
       {open && (
         <div className="mt-6 mb-5 max-w-md mx-auto bg-gray-200 shadow-lg rounded-xl p-6 text-left animate-fade-in">
 
@@ -73,12 +71,10 @@ const TrackIssue = () => {
             </button>
           </div>
 
-          {/* Error */}
           {error && (
             <p className="text-red-600 mt-3 text-sm">{error}</p>
           )}
 
-          {/* Result */}
           {result && (
             <div className="mt-5 border rounded-lg p-4 mb-5 space-y-3">
 

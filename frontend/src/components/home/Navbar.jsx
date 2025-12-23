@@ -39,7 +39,7 @@ const Navbar = () => {
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => navigate("/")}
           >
-            <ShieldCheck className="text-emerald-600 w-7 h-7" />
+            <img className="text-emerald-600 w-7 h-7" src="/icons/icon-512.png"/>
             <span className="text-xl font-bold text-gray-900">
               Campus<span className="text-emerald-600">Care</span>
             </span>

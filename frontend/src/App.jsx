@@ -23,7 +23,7 @@ const App = () => {
       <Route path="/" element={<Home />} />
       <Route path="/issues/report" element={<SubmitIssue />} />
       <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/issue/details" element={<TrackIssuePage />} />
+      <Route path="/track/issue/:id" element={<TrackIssuePage />} />
 
       {/* Protected Admin */}
       <Route
