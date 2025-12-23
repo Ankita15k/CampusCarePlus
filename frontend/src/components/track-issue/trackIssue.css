@@ -1,3 +1,7 @@
+/* =========================
+   BASE LAYOUT
+========================= */
+
 .track-bg {
   min-height: 100vh;
   background: linear-gradient(135deg, #ecfdf5, #f0fdfa);
@@ -8,29 +12,40 @@
   max-width: 1100px;
   margin: auto;
   padding: 0 20px;
+  width: 100%;
 }
+
+/* =========================
+   HEADER
+========================= */
 
 .track-header {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .track-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   font-size: 1.8rem;
   color: #065f46;
 }
 
 .back-btn {
-  display: flex;
-  gap: 6px;
-  align-items: center;
+  border: none;
   background: white;
-  border-radius: 10px;
   padding: 8px 14px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
+
+/* =========================
+   SEARCH CARD
+========================= */
 
 .search-card {
   display: flex;
@@ -38,7 +53,7 @@
   background: white;
   padding: 16px;
   border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
 .search-card input {
@@ -46,27 +61,67 @@
   padding: 12px;
   border-radius: 12px;
   border: 1px solid #d1fae5;
+  font-size: 15px;
 }
+
+/* =========================
+   GLASS CARD (COMMON)
+========================= */
 
 .glass-card {
   margin-top: 1rem;
-  background: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.9);
   backdrop-filter: blur(10px);
   border-radius: 20px;
   padding: 24px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.05);
 }
 
-.summary-header {
-  display: flex;
-  justify-content: space-between;
+/* =========================
+   HERO CARD
+========================= */
+
+.hero-card-detail {
+  background: white;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.08);
 }
 
-.status-pill {
-  padding: 8px 16px;
-  border-radius: 999px;
-  font-weight: 500;
+.hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
+
+.hero-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 20px;
+  gap: 16px;
+}
+
+.meta-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 15px;
+}
+
+/* =========================
+   STATUS PILL
+========================= */
+
+.status-pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
 .status-pill.Resolved {
   background: #d1fae5;
   color: #065f46;
@@ -82,101 +137,26 @@
   color: #1e40af;
 }
 
-.status-pill.R.track-bg {
-  min-height: 100vh;
-  background: linear-gradient(180deg, #ecfdf5, #ffffff);
-  padding: 40px 0;
+.status-pill.Rejected {
+  background: #fee2e2;
+  color: #991b1b;
 }
 
-.track-container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 0 16px;
-}
+/* =========================
+   PROGRESS TRACKER
+========================= */
 
-.track-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.back-btn {
-  border: none;
-  background: white;
-  padding: 8px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,.08);
-}
-
-.search-card {
-  display: flex;
-  gap: 12px;
-  background: white;
-  padding: 16px;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.08);
-}
-
-.search-card input {
-  flex: 1;
-  border: none;
-  font-size: 15px;
-}
-
-.hero-card-detail {
-  background: white;
-  margin-top: 2rem;
-  padding: 1.5rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 14px 35px rgba(0,0,0,.08);
-}
-
-.hero-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.status-pill {
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 14px;
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.hero-meta {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-top: 20px;
-  gap: 16px;
-}
-
-.meta-item {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  font-size: medium;
-}
-
-.glass-card {
-  background: white;
-  padding: 1.3rem;
-  border-radius: 18px;
-  box-shadow: 0 12px 30px rgba(0,0,0,.08);
-}
-
+.progress-line,
 .timeline {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
+  gap: 12px;
 }
 
 .step {
-  text-align: center;
   flex: 1;
+  text-align: center;
   opacity: 0.4;
 }
 
@@ -184,48 +164,6 @@
 .step.success,
 .step.error {
   opacity: 1;
-}
-
-.step-icon {
-  margin-bottom: 0.4rem;
-}
-
-.remark {
-  display: block;
-  margin-top: 6px;
-  font-size: 13px;
-  color: #555;
-}
-
-.two-column {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 24px;
-}
-
-.two-column img {
-  width: 100%;
-  border-radius: 12px;
-}
-
-@media (max-width: 768px) {
-  .two-column {
-    grid-template-columns: 1fr;
-  }
-}
-ejected {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-.progress-line {
-  display: flex;
-  justify-content: space-between;
-}
-
-.step {
-  text-align: center;
-  flex: 1;
 }
 
 .step-icon {
@@ -239,19 +177,51 @@ ejected {
   margin: auto;
 }
 
-.step.active .step-icon { background: #7ca6e4; color: white; }
-.step.success .step-icon { background: #10b981; color: white; }
-.step.error .step-icon { background: #ef4444; color: white; }
+.step.active .step-icon {
+  background: #7ca6e4;
+  color: white;
+}
+
+.step.success .step-icon {
+  background: #10b981;
+  color: white;
+}
+
+.step.error .step-icon {
+  background: #ef4444;
+  color: white;
+}
 
 .remark {
   display: block;
   margin-top: 6px;
   font-size: 13px;
+  color: #555;
   background: #f9fafb;
   padding: 6px;
   border-radius: 8px;
 }
 
+/* =========================
+   ATTACHMENT / IMAGE
+========================= */
+
+.two-column {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+}
+
+.two-column img {
+  width: 100%;
+  border-radius: 12px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* =========================
+   LOADING
+========================= */
 
 .loading-wrapper {
   margin-top: 20px;
@@ -261,34 +231,27 @@ ejected {
 .loading-bar {
   height: 4px;
   width: 100%;
-  background: linear-gradient(
-    90deg,
-    #6366f1,
-    #22d3ee,
-    #6366f1
-  );
+  background: linear-gradient(90deg, #6366f1, #22d3ee, #6366f1);
   background-size: 200% 100%;
   animation: loadingMove 1.2s linear infinite;
   border-radius: 4px;
 }
 
 @keyframes loadingMove {
-  0% {
-    background-position: 0% 0%;
-  }
-  100% {
-    background-position: 200% 0%;
-  }
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
 }
 
+/* =========================
+   NOT FOUND
+========================= */
 
 .notfound-wrapper {
   margin-top: 40px;
   padding: 30px;
   text-align: center;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.85);
 }
 
 .notfound-icon {
@@ -310,4 +273,74 @@ ejected {
   margin-top: 8px;
   font-size: 0.85rem;
   opacity: 0.7;
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .track-bg {
+    padding: 16px 0;
+  }
+
+  .track-container {
+    padding: 0 12px;
+  }
+
+  .track-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .hero-card-detail {
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  .hero-meta {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .progress-line,
+  .timeline {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .step {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+  }
+
+  .step-icon {
+    margin: 0;
+  }
+
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .glass-card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .track-header h1 {
+    font-size: 1.1rem;
+  }
+
+  .status-pill {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  p {
+    font-size: 0.9rem;
+  }
 }
