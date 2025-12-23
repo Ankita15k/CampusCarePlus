@@ -2,8 +2,8 @@ import { Search } from "lucide-react";
 
 const IssueSearchBar = ({ value, onChange, onOpen }) => {
   return (
-    <div className="sticky top-0 z-10 bg-white p-4 border-b">
-      <div className="relative max-w-md">
+    <div className="sticky top-0 z-10 p-4  mb-2 w-full">
+      <div className="relative w-full">
         <Search className="absolute left-3 top-3 text-gray-400" size={18} />
         <input
           value={value}

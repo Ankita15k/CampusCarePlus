@@ -1,11 +1,20 @@
 const { db, admin } = require("../config/firebase");
 const generateIssueMeta = require("../utils/geminiSummary");
+const sendNotification = require("../utils/notification");
 const uploadToCloudinary = require("../utils/uploadImage");
 
 const submitIssue = async (req, res) => {
   try {
-    const { name, description, category, anonymous, contact, location, id } =
-      req.body;
+    const {
+      name,
+      description,
+      category,
+      anonymous,
+      contact,
+      location,
+      id,
+      fcmToken,
+    } = req.body;
 
     if (!description || !category) {
       return res
@@ -15,11 +24,11 @@ const submitIssue = async (req, res) => {
 
     const [aiData, imageResult] = await Promise.all([
       generateIssueMeta({ category, location, description }),
-      req.file ? uploadToCloudinary(req.file.buffer) : Promise.resolve(null),
+      req.file ? uploadToCloudinary(req.file.buffer) : null,
     ]);
 
     const issueData = {
-      id: id,
+      id,
       name: anonymous === "true" ? null : name,
       contact: anonymous === "true" ? null : contact,
       description,
@@ -35,10 +44,29 @@ const submitIssue = async (req, res) => {
       imageUrl: imageResult?.secure_url || null,
       imagePublicId: imageResult?.public_id || null,
 
+      fcmToken: fcmToken || null,
+
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
 
     const docRef = await db.collection("issues").add(issueData);
+
+    if (fcmToken) {
+      try {
+        await sendNotification({
+          token: fcmToken,
+          title: "Issue Submitted Successfully ✅",
+          body: `Your issue has been received. Tracking ID: ${id}`,
+          data: {
+            issueId: id,
+            type: "ISSUE_SUBMITTED",
+            url: `/track/${id}`,
+          },
+        });
+      } catch (notifyErr) {
+        console.warn("Notification failed:", notifyErr.message);
+      }
+    }
 
     return res.status(201).json({
       success: true,
@@ -79,11 +107,17 @@ const getIssueDetail = async (req, res) => {
     status: issue.status,
     location: issue.location,
     resolvingRemark: issue.resolvingRemark ? issue.resolvingRemark : null,
-    resolvedAt:issue.resolvedAt ? issue.resolvedAt.toDate().toISOString() : null,
+    resolvedAt: issue.resolvedAt
+      ? issue.resolvedAt.toDate().toISOString()
+      : null,
     processingRemark: issue.processingRemark ? issue.processingRemark : null,
-    inProgressAt:issue.inProgressAt ? issue.inProgressAt.toDate().toISOString() : null,
+    inProgressAt: issue.inProgressAt
+      ? issue.inProgressAt.toDate().toISOString()
+      : null,
     rejectionemark: issue.rejectionemark ? issue.rejectionemark : null,
-    rejectedAt:issue.rejectedAt ? issue.rejectedAt.toDate().toISOString():null,
+    rejectedAt: issue.rejectedAt
+      ? issue.rejectedAt.toDate().toISOString()
+      : null,
     createdAt: issue.createdAt ? issue.createdAt.toDate().toISOString() : null,
     submittedBy: issue.anonymous ? "anonymous" : issue.name,
   });
@@ -148,11 +182,12 @@ const getIssueDetailAdmin = async (req, res) => {
     status: issue.status,
     priority: issue.priority,
     resolvingRemark: issue.resolvingRemark,
-    resolvedAt:issue.resolvedAt && issue.resolvedAt.toDate().toISOString(),
+    resolvedAt: issue.resolvedAt && issue.resolvedAt.toDate().toISOString(),
     processingRemark: issue.processingRemark,
-    inProgressAt:issue.inProgressAt && issue.inProgressAt.toDate().toISOString(),
+    inProgressAt:
+      issue.inProgressAt && issue.inProgressAt.toDate().toISOString(),
     rejectionemark: issue.rejectionemark,
-    rejectedAt:issue.rejectedAt && issue.rejectedAt.toDate().toISOString(),
+    rejectedAt: issue.rejectedAt && issue.rejectedAt.toDate().toISOString(),
     createdAt: issue.createdAt ? issue.createdAt.toDate().toISOString() : null,
     submittedBy: issue.anonymous ? "anonymous" : issue.name,
   });
@@ -183,12 +218,30 @@ const markResolved = async (req, res) => {
 
     const issueDoc = snapshot.docs[0];
     const issueRef = db.collection("issues").doc(issueDoc.id);
+    const issueData = issueDoc.data();
 
     await issueRef.update({
       status: "Resolved",
       resolvingRemark: remark,
       resolvedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
+
+    if (issueData.fcmToken) {
+      try {
+        await sendNotification({
+          token: issueData.fcmToken,
+          title: "Issue resolved Successfully ✅",
+          body: `Your issue has been resolved. Tracking ID: ${reportId}`,
+          data: {
+            issueId: reportId,
+            type: "ISSUE_RESOLVED",
+            url: `/track/${reportId}`,
+          },
+        });
+      } catch (notifyErr) {
+        console.warn("Notification failed:", notifyErr.message);
+      }
+    }
 
     return res.status(200).json({
       message: "Issue marked as resolved successfully",
@@ -242,6 +295,23 @@ const markInProgress = async (req, res) => {
       inProgressAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
+    if (issueData.fcmToken) {
+      try {
+        await sendNotification({
+          token: issueData.fcmToken,
+          title: "Issue Update 🔄",
+          body: `Your issue ${reportId} is now being processed`,
+          data: {
+            issueId: String(reportId),
+            status: "IN_PROGRESS",
+            type: "ISSUE_STATUS",
+            url: `/track/${reportId}`,
+          },
+        });
+      } catch (notifyErr) {
+        console.warn("Notification failed:", notifyErr.message);
+      }
+    }
     return res.status(200).json({
       message: "Issue marked as In Progress successfully",
       reportId,
@@ -300,6 +370,24 @@ const markRejected = async (req, res) => {
       rejectedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
+    if (issueData.fcmToken) {
+      try {
+        await sendNotification({
+          token: issueData.fcmToken,
+          title: "Issue Update ❗",
+          body: `Your issue ${reportId} was closed. Reason: ${remark}`,
+          data: {
+            issueId: String(reportId),
+            status: "REJECTED",
+            type: "ISSUE_REJECTED",
+            url: `/track/${reportId}`,
+          },
+        });
+      } catch (notifyErr) {
+        console.warn("Notification failed:", notifyErr.message);
+      }
+    }
+
     return res.status(200).json({
       message: "Issue marked as rejected successfully",
       reportId,
@@ -312,7 +400,6 @@ const markRejected = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   getIssueDetail,

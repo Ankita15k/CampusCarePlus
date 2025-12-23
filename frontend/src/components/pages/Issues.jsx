@@ -44,7 +44,7 @@ const searchResults = UseIssueSearch(allIssues, searchQuery);
     <div>
       <h1 className="text-2xl font-bold mb-6">All Issues</h1>
 
-      <div className="flex justify-center ">
+      <div className="flex justify-center w-full ">
         <IssueSearchBar
         value={searchQuery}
         onChange={setSearchQuery}

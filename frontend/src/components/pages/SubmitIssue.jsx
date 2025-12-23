@@ -7,6 +7,7 @@ import { Upload } from "lucide-react";
 import { generateReportId } from "../../utils/generateReportId";
 import submitIssue from "../../utils/submitissue";
 import IssuePreview from "./IssuePreview";
+import { requestNotificationPermission } from "../../utils/requestNotificationPermission";
 
 const SubmitIssue = () => {
   const [anonymous, setAnonymous] = useState(true);
@@ -60,52 +61,59 @@ const SubmitIssue = () => {
     setImagePreview(URL.createObjectURL(file));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // console.log(captchaToken);
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!captchaToken) {
-      toast.error("verify captcha first");
-      return;
+  if (!captchaToken) {
+    toast.error("verify captcha first");
+    return;
+  }
+
+  if (!anonymous && (!form.name || !form.contact)) {
+    toast.error("Name and contact are required");
+    return;
+  }
+
+  setisSubmitting(true);
+  const toastId = toast.loading("Reporting");
+
+  try {
+    // notification permission
+    const fcmToken = await requestNotificationPermission();
+
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("contact", form.contact);
+    formData.append("description", form.description);
+    formData.append("category", form.category);
+    formData.append("anonymous", anonymous);
+    formData.append("location", form.location);
+    formData.append("token", captchaToken);
+    formData.append("image", imageFile);
+    formData.append("id", form.reportId);
+
+    
+    if (fcmToken) {
+      formData.append("fcmToken", fcmToken);
     }
 
-    if (!anonymous && (!form.name || !form.contact)) {
-      toast.error("Name and contact are required");
-      return;
+    const form_data = await submitIssue(formData);
+
+    if (form_data) {
+      toast.success("Report submitted", { id: toastId });
+      setShowOverlay(true);
+    } else {
+      toast.error("failed to submit", { id: toastId });
     }
 
-    setisSubmitting(true);
-    const toastId = toast.loading("Reporting");
+  } catch (err) {
+    console.error(err);
+    toast.error("Something went wrong", { id: toastId });
+  } finally {
+    setisSubmitting(false);
+  }
+};
 
-    try {
-      const formData = new FormData();
-      formData.append("name", form.name);
-      formData.append("contact", form.contact);
-      formData.append("description", form.description);
-      formData.append("category", form.category);
-      formData.append("anonymous", anonymous);
-      formData.append("location", form.location);
-      formData.append("token", captchaToken);
-      formData.append("image", imageFile);
-      formData.append("id", form.reportId);
-
-      const form_data = await submitIssue(formData);
-
-      if (form_data) {
-        toast.success("Report submitted", { id: toastId });
-        setShowOverlay(true);
-      }
-      else {
-        toast.error("failed to submit", { id: toastId })
-      }
-
-    } catch (err) {
-
-      console.log(err);
-    } finally {
-      setisSubmitting(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">

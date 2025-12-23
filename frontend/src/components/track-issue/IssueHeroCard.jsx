@@ -21,7 +21,7 @@ const IssueHeroCard = ({ issue }) => {
   },
 };
   return (
-    <div className="hero-card-detail">
+    <div className="hero-card-detail mt-4">
       <div className="hero-top">
         <h2 className="text-xl mb-3 font-semibold text-gray-900">{issue.title}</h2>
         <div

@@ -251,3 +251,63 @@ ejected {
   padding: 6px;
   border-radius: 8px;
 }
+
+
+.loading-wrapper {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.loading-bar {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    #6366f1,
+    #22d3ee,
+    #6366f1
+  );
+  background-size: 200% 100%;
+  animation: loadingMove 1.2s linear infinite;
+  border-radius: 4px;
+}
+
+@keyframes loadingMove {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 0%;
+  }
+}
+
+
+.notfound-wrapper {
+  margin-top: 40px;
+  padding: 30px;
+  text-align: center;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+}
+
+.notfound-icon {
+  color: #ef4444;
+  margin-bottom: 12px;
+}
+
+.notfound-wrapper h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.notfound-wrapper p {
+  opacity: 0.85;
+  font-size: 0.95rem;
+}
+
+.notfound-hint {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}

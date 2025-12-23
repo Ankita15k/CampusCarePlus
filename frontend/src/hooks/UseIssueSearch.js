@@ -10,11 +10,13 @@ const useIssueSearch = (issues, query) => {
       const summary = issue.summary || issue.title || "";
       const description = issue.description || "";
       const category = issue.category || "";
+      const id = issue.id || ""
 
       return (
         summary.toLowerCase().includes(q) ||
         description.toLowerCase().includes(q) ||
-        category.toLowerCase().includes(q)
+        category.toLowerCase().includes(q) ||
+        id.toLowerCase().includes(q)
       );
     });
   }, [issues, query]);
